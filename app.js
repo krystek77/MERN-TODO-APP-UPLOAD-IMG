@@ -17,13 +17,6 @@ app.use(
 );
 app.use(morgan("dev"));
 app.use("/uploads", express.static("uploads"));
-if (process.env.NODE_ENV === "production") {
-  //Set static folder
-  app.use(express.static("uploads"));
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "uploads"));
-  });
-}
 const userRoutes = require("./api/routes/users");
 const taskRoutes = require("./api/routes/tasks");
 
