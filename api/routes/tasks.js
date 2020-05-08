@@ -5,7 +5,7 @@ require("dotenv").config();
 const cloudinary = require("cloudinary");
 cloudinary.config({
   cloud_name: "doydwvtkw",
-  api_key: "874837483274837",
+  api_key: "534261967619197",
   api_secret: "9hYGUFEFVLwchVSnPKkC2wWBsFA",
 });
 const upload = require("../../helpers/multer");
@@ -67,31 +67,22 @@ router.post("/", auth, upload.single("image"), async (req, res, next) => {
   const userId = req.user.id;
   try {
     const result = await cloudinary.v2.uploader.upload(req.file.path);
-    res.send(result);
-  } catch (error) {
-    console.log("error", error);
-  }
-
-  const task = new Task({
-    title: title,
-    priority: priority,
-    description: description,
-    deadline: deadline,
-    userId: userId,
-    createdAt: new Date().toISOString().slice(0, 10),
-    image: "",
-  });
-  task
-    .save()
-    .then((task) => {
-      console.log("save");
-      console.log(task);
-      res.status(201).json(task);
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(400).json({ message: "Adding new task failed" });
+    console.log("RESULT", result);
+    const task = new Task({
+      title: title,
+      priority: priority,
+      description: description,
+      deadline: deadline,
+      userId: userId,
+      createdAt: new Date().toISOString().slice(0, 10),
+      image: result.secure_url,
     });
+    await task.save();
+    console.log("SAVE");
+    res.status(201).json(task);
+  } catch (error) {
+    console.log(error);
+  }
 });
 //@route DELETE tasks/:idTask
 //@desc Delete one task
