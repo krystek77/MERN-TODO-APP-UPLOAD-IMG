@@ -1,30 +1,17 @@
 const express = require("express");
 const router = express.Router();
-// const multer = require("multer");
 require("dotenv").config();
 const cloudinary = require("cloudinary");
+
 cloudinary.config({
-  cloud_name: "doydwvtkw",
-  api_key: "534261967619197",
-  api_secret: "9hYGUFEFVLwchVSnPKkC2wWBsFA",
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET,
 });
+
 const upload = require("../../helpers/multer");
 const Task = require("../models/task");
 const auth = require("../middleware/auth");
-
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, "./uploads/");
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, new Date().toISOString() + file.originalname);
-//   },
-// });
-
-// const upload = multer({
-//   storage: storage,
-// });
-//................................................................
 
 //@route	GET tasks/
 //@desc		Get all tasks
@@ -54,7 +41,7 @@ router.get("/:idTask", (req, res, next) => {
           .status(400)
           .json({ message: `Task with id ${id} does not exist` });
       }
-      console.log("GET by ID",task)
+      console.log("GET by ID", task);
       res.status(200).json(task);
     })
     .catch((error) =>
