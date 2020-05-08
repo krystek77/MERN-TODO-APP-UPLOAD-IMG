@@ -110,13 +110,13 @@ function CreateTask(props) {
     });
   };
   //
-//   const handleImage = (event) => {
-//     const image = event.target.files[0];
-//     setTask({
-//       ...task,
-//       image,
-//     });
-//   };
+  //   const handleImage = (event) => {
+  //     const image = event.target.files[0];
+  //     setTask({
+  //       ...task,
+  //       image,
+  //     });
+  //   };
   const [file, setFile] = useState(null);
   const CLOUDINARY_API_BASE_URL =
     "https://api.cloudinary.com/v1_1/doydwvtkw/image/upload";
@@ -127,6 +127,7 @@ function CreateTask(props) {
    */
   const handleFile = (event) => {
     const file = event.target.files[0];
+    console.log(file);
     setFile(file);
   };
   //
@@ -143,7 +144,7 @@ function CreateTask(props) {
       const data = await res.json();
       const imageURL = data.secure_url;
 
-      formData.append("image", imageURL);
+      formData.append("image", file);
       formData.append("title", task.title);
       formData.append("priority", task.priority);
       formData.append("description", task.description);

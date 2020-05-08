@@ -1,22 +1,31 @@
 const express = require("express");
 const router = express.Router();
-const multer = require("multer");
+// const multer = require("multer");
+require("dotenv").config();
+const cloudinary = require("cloudinary");
+cloudinary.config({
+  cloud_name: "doydwvtkw",
+  api_key: "874837483274837",
+  api_secret: "9hYGUFEFVLwchVSnPKkC2wWBsFA",
+});
+const upload = require("../../helpers/multer");
 const Task = require("../models/task");
 const auth = require("../middleware/auth");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, new Date().toISOString() + file.originalname);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "./uploads/");
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, new Date().toISOString() + file.originalname);
+//   },
+// });
 
-const upload = multer({
-  storage: storage,
-});
+// const upload = multer({
+//   storage: storage,
+// });
 //................................................................
+
 //@route	GET tasks/
 //@desc		Get all tasks
 //@access	Private
@@ -53,9 +62,15 @@ router.get("/:idTask", (req, res, next) => {
 // @route 	POST tasks/
 // @desc 	Add new task
 // @access 	Private
-router.post("/", auth, upload.single("image"), (req, res, next) => {
+router.post("/", auth, upload.single("image"), async (req, res, next) => {
   const { title, priority, description, deadline } = req.body;
   const userId = req.user.id;
+  try {
+    const result = await cloudinary.v2.uploader.upload(req.file.path);
+    res.send(result);
+  } catch (error) {
+    console.log("error", error);
+  }
 
   const task = new Task({
     title: title,
