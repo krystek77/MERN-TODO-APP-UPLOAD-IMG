@@ -102,7 +102,11 @@ function TaskDetail({ match, getTaskById, task, classes }) {
               title={title}
               subheader={`Created at ${createdAt}. Updated at ${updatedAt}. DEADLINE ${deadline}`}
             />
-            <CardMedia className={classes.media} image={image} title={title} />
+            <CardMedia
+              className={classes.media}
+              image={image}
+              title={title}
+            />
             <CardContent>
               <Typography variant="body2" component="p">
                 {description}

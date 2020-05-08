@@ -127,7 +127,11 @@ function UrgentTodoTask({ classes, deleteTask, tasks }) {
           classes={{ root: classes.buttonBase }}
         >
           <CardActionArea>
-            <CardMedia className={classes.media} image={image} title={title} />
+            <CardMedia
+              className={classes.media}
+              image={image}
+              title={title}
+            />
             <CardContent>
               <Typography gutterBottom variant="h5" component="h3">
                 {title}
