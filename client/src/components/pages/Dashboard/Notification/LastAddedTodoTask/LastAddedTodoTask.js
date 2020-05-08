@@ -127,7 +127,7 @@ function LastAddedTodoTask({ classes, tasks, deleteTask }) {
 					classes={{ root: classes.buttonBase }}
 				>
 					<CardActionArea>
-						<CardMedia className={classes.media} image={`http://localhost:4000/${image}`} title={title} />
+						<CardMedia className={classes.media} image={image} title={title} />
 						<CardContent>
 							<Typography gutterBottom variant="h5" component="h3">
 								{title}
