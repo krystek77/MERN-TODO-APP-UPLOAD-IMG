@@ -49,10 +49,12 @@ router.get("/:idTask", (req, res, next) => {
   Task.findById(id)
     .select("-__v")
     .then((task) => {
-      if (!task)
+      if (!task) {
         return res
           .status(400)
           .json({ message: `Task with id ${id} does not exist` });
+      }
+      console.log("GET by ID",task)
       res.status(200).json(task);
     })
     .catch((error) =>

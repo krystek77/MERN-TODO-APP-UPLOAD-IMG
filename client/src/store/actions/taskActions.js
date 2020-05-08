@@ -107,12 +107,13 @@ export const getTaskById = (idTask, abortController) => {
       signal: abortController.signal,
     })
       .then((result) => {
-        // console.log(result);
+        console.log("Get Task by ID", result);
         if (result.ok) {
           return result.json();
         }
       })
       .then((task) => {
+        console.log("Get Task by ID after json", task);
         dispatch({ type: type.GET_TASK_BY_ID, task: task });
       })
       .catch((error) => console.log(error));
