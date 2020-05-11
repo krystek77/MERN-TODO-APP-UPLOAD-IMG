@@ -109,14 +109,6 @@ function CreateTask(props) {
       deadline: event.target.value,
     });
   };
-  //
-  //   const handleImage = (event) => {
-  //     const image = event.target.files[0];
-  //     setTask({
-  //       ...task,
-  //       image,
-  //     });
-  //   };
   const [file, setFile] = useState(null);
   const CLOUDINARY_API_BASE_URL =
     "https://api.cloudinary.com/v1_1/doydwvtkw/image/upload";
@@ -149,8 +141,8 @@ function CreateTask(props) {
       formData.append("priority", task.priority);
       formData.append("description", task.description);
       formData.append("deadline", task.deadline);
-      formData.append("createdAt", minDate);
-      formData.append("updatedAt", minDate);
+      formData.append("createdAt", task.createdAt);
+      formData.append("updatedAt", task.updatedAt);
 
       setTask({
         ...task,
@@ -174,6 +166,8 @@ function CreateTask(props) {
         deadline: minDate,
         image: null,
         description: "",
+        createdAt: minDate,
+        updatedAt: minDate,
       });
       setFile("");
     } catch (error) {

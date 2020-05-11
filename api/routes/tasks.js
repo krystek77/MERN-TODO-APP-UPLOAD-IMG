@@ -106,40 +106,36 @@ router.delete("/:idTask", (req, res, next) => {
 //@route PUT tasks/:idTask
 //desc Update task
 //access Private
-router.put("/:idTask", upload.single("image"), (req, res, next) => {
+router.put("/:idTask", upload.single("image"), async (req, res, next) => {
   const id = req.params.idTask;
-  Task.findById(id)
-    .then((task) => {
-      if (!task)
-        return res.status(404).json({ message: "Task does not exist" });
+  try {
+    const image = await cloudinary.v2.uploader.upload(req.file.path);
+    console.log(image);
+    const task = await Task.findById(id);
+    console.log(task);
+    if (!task) return res.status(404).json({ message: "Task does not exist" });
 
-      task.title = req.body.title;
-      task.priority = req.body.priority;
-      task.deadline = req.body.deadline;
-      task.description = req.body.description;
-      task.image = req.file ? req.file.path : task.image;
-      task.createdAt = req.body.createdAt;
-      task.finished = req.body.finished;
-      task.updatedAt = req.body.updatedAt;
+    task.title = req.body.title;
+    task.priority = req.body.priority;
+    task.deadline = req.body.deadline;
+    task.description = req.body.description;
+    task.image = image.secure_url;
+    task.createdAt = req.body.createdAt;
+    task.finished = req.body.finished;
+    task.updatedAt = req.body.updatedAt;
 
-      task
-        .save()
-        .then((result) => {
-          res.status(200).json({
-            task: task,
-            message: `Task with id ${id} was updated successfully`,
-          });
-        })
-        .catch((error) =>
-          res
-            .status(400)
-            .json({ message: `Task with id ${id} was not updated` })
-        );
-    })
-    .catch((error) =>
-      res.status(404).json({ message: "Something went wrong..." })
-    );
+    await task.save();
+    console.log("SAVE UPDATED IMAGE");
+
+    res.status(200).json({
+      task: task,
+      message: `Task with id ${id} was updated successfully`,
+    });
+  } catch (error) {
+    res.status(404).json({ message: "Something went wrong..." });
+  }
 });
+
 //@route PUT tasks/finish/:idTask
 //@desc Finish task
 //@access Private

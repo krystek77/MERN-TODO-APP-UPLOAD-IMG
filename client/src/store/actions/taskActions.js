@@ -76,7 +76,8 @@ export const createTask = (task) => {
 };
 //
 export const editTask = (task, id) => {
-  // console.log(id);
+  console.log(id);
+  console.log(task);
   return (dispatch, getState) => {
     fetch(`/tasks/${id}`, {
       method: "PUT",

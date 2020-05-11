@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 const styles = theme => ({
 	pageTitle: {
 		paddingTop: theme.spacing.unit * 4,
-		paddingBottom: theme.spacing.unit * 4,
+		paddingBottom: theme.spacing.unit * 2,
 		fontWeight: '700',
 	},
 });
