@@ -94,7 +94,10 @@ function TaskDetail({ match, getTaskById, task, classes }) {
     <div className={classes.wrapperDetailTask}>
       <Grid container spacing={16}>
         <Grid item xs={12}>
-          <PageTitle>detail task - {idTask}</PageTitle>
+          <PageTitle>tasks details</PageTitle>
+          <Typography component="div" variant="subtitle2" align="center">
+            {idTask}
+          </Typography>
         </Grid>
         <Grid item xs={12}>
           <Card classes={{ root: classes.root }}>
@@ -102,11 +105,7 @@ function TaskDetail({ match, getTaskById, task, classes }) {
               title={title}
               subheader={`Created at ${createdAt}. Updated at ${updatedAt}. DEADLINE ${deadline}`}
             />
-            <CardMedia
-              className={classes.media}
-              image={image}
-              title={title}
-            />
+            <CardMedia className={classes.media} image={image} title={title} />
             <CardContent>
               <Typography variant="body2" component="p">
                 {description}
