@@ -60,6 +60,7 @@ function TaskDetail({
     finished: false,
   });
   const [isMessage, setIsMessage] = useState(false);
+  const [imgURL, setImgURL] = useState(false);
 
   const { idTask } = match.params;
 
@@ -84,6 +85,7 @@ function TaskDetail({
         });
       }
       setIsMessage(false);
+      setImgURL(true);
     }
     return () => {
       mounted = false;
@@ -154,7 +156,16 @@ function TaskDetail({
               title={title}
               subheader={`Created at ${createdAt}. Updated at ${updatedAt}. DEADLINE ${deadline}`}
             />
-            <CardMedia className={classes.media} image={image} title={title} />
+            {imgURL ? (
+              <CardMedia
+                className={classes.media}
+                image={image}
+                title={title}
+              />
+            ) : (
+              <LoadingSpinner description="Loading image" />
+            )}
+            {/* <CardMedia className={classes.media} image={image} title={title} /> */}
             <CardContent>
               <Typography variant="body2" component="p">
                 {description}
