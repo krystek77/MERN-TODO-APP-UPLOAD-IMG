@@ -78,9 +78,8 @@ export const createTask = (task) => {
 };
 //
 export const editTask = (task, id) => {
-  console.log(id);
-  console.log(task);
   return (dispatch, getState) => {
+    dispatch({ type: type.EDIT_TASK_INIT });
     fetch(`/tasks/${id}`, {
       method: "PUT",
       body: task,

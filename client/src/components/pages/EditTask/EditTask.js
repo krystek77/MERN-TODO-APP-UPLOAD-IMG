@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, Redirect } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import {
   Paper,
@@ -24,6 +24,9 @@ import { connect } from "react-redux";
 import { getTaskById, editTask } from "../../../store/actions/taskActions";
 import "abortcontroller-polyfill/dist/polyfill-patch-fetch";
 import teal from "@material-ui/core/colors/teal";
+
+import FetchError from "../../shared/FetchError/FetchError";
+import LoadingSpinner from "../../shared/LoadingSpinner/LoadingSpinner";
 
 const styles = (theme) => ({
   editTask: {},
@@ -71,7 +74,16 @@ const styles = (theme) => ({
 });
 
 function EditTask(props) {
-  const { classes, match, tasks, editTask, message, isAuthenticated } = props;
+  const {
+    classes,
+    match,
+    tasks,
+    editTask,
+    message,
+    isAuthenticated,
+    isLoading,
+    isError,
+  } = props;
   const id = match.params.idTask;
   const minDate = new Date().toISOString().slice(0, 10);
   let maxDate = minDate.slice(0, 4) * 1 + 2;
@@ -86,12 +98,13 @@ function EditTask(props) {
     updatedAt: minDate,
     createdAt: "",
   });
-  console.log(tasks);
   //
   const [isMessage, setIsMessage] = useState(false);
   //
+  const [isEditingTask, setIsEditingTask] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  //
   const handlePriority = (event) => {
-    console.log(event.target.value);
     setTask({
       ...task,
       priority: event.target.value,
@@ -99,7 +112,6 @@ function EditTask(props) {
   };
   //
   const handleInputText = (event) => {
-    // console.log(event.target.name);
     setTask({
       ...task,
       [event.target.name]: event.target.value,
@@ -118,7 +130,7 @@ function EditTask(props) {
    */
   const handleImage = (event) => {
     const image = event.target.files[0];
-    console.log(image);
+
     setTask({
       ...task,
       image: image,
@@ -131,20 +143,19 @@ function EditTask(props) {
 
   const handleUpdatingTodoTask = async (event) => {
     event.preventDefault();
-    console.log(task.image);
     //
     const formData = new FormData();
     formData.append("file", task.image);
     formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
     try {
+      setIsUploadingImage(true);
       const res = await fetch(CLOUDINARY_API_BASE_URL, {
         method: "POST",
         body: formData,
       });
       const data = await res.json();
+      setIsUploadingImage(false);
       const imgURL = data.secure_url;
-      console.log(data);
-      console.log(imgURL);
 
       formData.append("image", task.image);
       formData.append("title", task.title);
@@ -162,13 +173,10 @@ function EditTask(props) {
       formData.delete("file");
       formData.delete("upload_preset");
 
-      for (let element of formData) {
-        console.log(element);
-      }
-      //
-      editTask(formData, id);
-      //
       setIsMessage(true);
+      editTask(formData, id);
+      setIsEditingTask(true);
+      //
     } catch (error) {
       console.log("Failed save image to Cloudinary");
     }
@@ -179,12 +187,10 @@ function EditTask(props) {
     let mounted = true;
     const filteredTaskById = tasks.filter((task) => task._id === id);
     const [task] = filteredTaskById;
-    console.log(task);
     const controller = new AbortController();
     const interval = setTimeout(() => setIsMessage(false), 1000);
 
     if (mounted) {
-      console.log("useEffect");
       if (task) {
         setTask({
           ...task,
@@ -201,6 +207,55 @@ function EditTask(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   //
+  //
+  if (isError)
+    return (
+      <>
+        <FetchError />
+        {isMessage && (
+          <Typography
+            component="span"
+            variant="body1"
+            align="center"
+            classes={{ root: classes.message }}
+          >
+            {message}
+          </Typography>
+        )}
+      </>
+    );
+  else if (isLoading)
+    return (
+      <>
+        {isMessage && (
+          <Typography
+            component="span"
+            variant="body1"
+            align="center"
+            classes={{ root: classes.message }}
+          >
+            {message}
+          </Typography>
+        )}
+        <LoadingSpinner description="Editing task" />
+      </>
+    );
+  else if (isUploadingImage)
+    return (
+      <>
+        {isMessage && (
+          <Typography
+            component="span"
+            variant="body1"
+            align="center"
+            classes={{ root: classes.message }}
+          >
+            {message}
+          </Typography>
+        )}
+        <LoadingSpinner description="Uploading image" />
+      </>
+    );
   let { title, priority, deadline, description, image } = task;
   return (
     <div className={classes.wditTask}>
@@ -324,6 +379,7 @@ function EditTask(props) {
           </Grid>
         </form>
       </Paper>
+      {isEditingTask && <Redirect to={`/tasks/todo/details/${id}`} />}
     </div>
   );
 }
@@ -331,6 +387,8 @@ function EditTask(props) {
 const mapStateToProps = (state) => {
   console.log(state);
   return {
+    isLoading: state.task.isLoading,
+    isError: state.task.isError,
     tasks: state.task.tasks,
     message: state.task.message,
   };

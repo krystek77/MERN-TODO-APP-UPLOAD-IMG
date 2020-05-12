@@ -73,20 +73,28 @@ const tasksReducer = (state = initState, action) => {
         isError: true,
         message: "Created task failed",
       };
-    case type.EDIT_TASK:
-      console.log(type.EDIT_TASK);
-      const inx = state.tasks.findIndex((task) => task._id === action.task._id);
-      state.tasks[inx] = action.task;
-
+    case type.EDIT_TASK_INIT:
       return {
         ...state,
+        isLoading: true,
+        isError: false,
+        message: "Editing task, please wait.",
+      };
+    case type.EDIT_TASK:
+      const inx = state.tasks.findIndex((task) => task._id === action.task._id);
+      state.tasks[inx] = action.task;
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
         task: action.task,
         message: action.message,
       };
     case type.EDIT_TASK_ERROR:
-      console.log(type.EDIT_TASK_ERROR);
       return {
         ...state,
+        isLoading: false,
+        isError: true,
         message: action.message,
       };
     case type.GET_TASK_BY_ID_INIT:
