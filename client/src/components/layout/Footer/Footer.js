@@ -29,7 +29,7 @@ function Footer({ classes }) {
 				Krystian Wrona, 2019 - 2020
 			</Typography>
 			<Link
-				href="https://github.com"
+				href="https://github.com/krystek77"
 				color="secondary"
 				target="_blank"
 				rel="noopener"
