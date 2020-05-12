@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, Redirect } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import {
   Paper,
@@ -23,6 +23,8 @@ import PageTitle from "../../shared/PageTitle/PageTitle";
 import { connect } from "react-redux";
 import { createTask } from "../../../store/actions/taskActions";
 import teal from "@material-ui/core/colors/teal";
+import FetchError from "../../shared/FetchError/FetchError";
+import LoadingSpinner from "../../shared/LoadingSpinner/LoadingSpinner";
 
 const styles = (theme) => ({
   createTask: {},
@@ -69,7 +71,14 @@ const styles = (theme) => ({
 });
 
 function CreateTask(props) {
-  const { classes, createTask, message, isAuthenticated } = props;
+  const {
+    classes,
+    createTask,
+    message,
+    isAuthenticated,
+    isLoading,
+    isError,
+  } = props;
   const minDate = new Date().toISOString().slice(0, 10);
   let maxDate = minDate.slice(0, 4) * 1 + 2;
   maxDate = maxDate + "-12-31";
@@ -87,6 +96,8 @@ function CreateTask(props) {
   //
   const [isMessage, setIsMessage] = useState(false);
   //
+  const [isCreateTask, setIsCreateTask] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const handlePriority = (event) => {
     // console.log(event.target.value);
     setTask({
@@ -119,7 +130,6 @@ function CreateTask(props) {
    */
   const handleFile = (event) => {
     const file = event.target.files[0];
-    console.log(file);
     setFile(file);
   };
   //
@@ -129,11 +139,13 @@ function CreateTask(props) {
     formData.append("file", file);
     formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
     try {
+      setIsUploadingImage(true);
       const res = await fetch(CLOUDINARY_API_BASE_URL, {
         method: "POST",
         body: formData,
       });
       const data = await res.json();
+      setIsUploadingImage(false);
       const imageURL = data.secure_url;
 
       formData.append("image", file);
@@ -152,13 +164,8 @@ function CreateTask(props) {
       formData.delete("file");
       formData.delete("upload_preset");
 
-      for (let element of formData) {
-        console.log(element);
-      }
-
-      createTask(formData);
-
       setIsMessage(true);
+      createTask(formData);
 
       setTask({
         title: "",
@@ -170,6 +177,7 @@ function CreateTask(props) {
         updatedAt: minDate,
       });
       setFile("");
+      setIsCreateTask(true);
     } catch (error) {
       console.log("Failed save image to Cloudinary");
     }
@@ -178,7 +186,7 @@ function CreateTask(props) {
   const { title, priority, deadline, description } = task;
   //
   useEffect(() => {
-    console.log(task);
+    console.log("USE EFFECT CREATE TASK");
     if (!isAuthenticated) props.history.push("/users/signin");
 
     const interval = setTimeout(() => setIsMessage(false), 1000);
@@ -186,20 +194,68 @@ function CreateTask(props) {
       clearTimeout(interval);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, isMessage, file]);
+  }, [isAuthenticated]);
   //
+  if (isError)
+    return (
+      <>
+        <FetchError />
+        {isMessage && (
+          <Typography
+            component="span"
+            variant="body1"
+            align="center"
+            classes={{ root: classes.message }}
+          >
+            {message}
+          </Typography>
+        )}
+      </>
+    );
+  else if (isLoading)
+    return (
+      <>
+        {isMessage && (
+          <Typography
+            component="span"
+            variant="body1"
+            align="center"
+            classes={{ root: classes.message }}
+          >
+            {message}
+          </Typography>
+        )}
+        <LoadingSpinner description="Creating task" />
+      </>
+    );
+  else if (isUploadingImage)
+    return (
+      <>
+        {isMessage && (
+          <Typography
+            component="span"
+            variant="body1"
+            align="center"
+            classes={{ root: classes.message }}
+          >
+            {message}
+          </Typography>
+        )}
+        <LoadingSpinner description="Uploading image" />
+      </>
+    );
   return (
     <div className={classes.createTask}>
-      {isMessage ? (
+      {isMessage && (
         <Typography
           component="span"
           variant="body1"
           align="center"
           classes={{ root: classes.message }}
         >
-          Message: {message}
+          {message}
         </Typography>
-      ) : null}
+      )}
       <PageTitle>create todo task</PageTitle>
       <Paper className={classes.formWrapper} elevation={1}>
         <form
@@ -317,12 +373,15 @@ function CreateTask(props) {
           </Grid>
         </form>
       </Paper>
+      {isCreateTask && <Redirect to="/dashboard" />}
     </div>
   );
 }
 
 const mapStateToProps = (state) => {
   return {
+    isLoading: state.task.isLoading,
+    isError: state.task.isError,
     message: state.task.message,
   };
 };

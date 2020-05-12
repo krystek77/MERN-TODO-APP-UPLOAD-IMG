@@ -59,7 +59,9 @@ export const deleteTask = (idTask) => {
 //
 export const createTask = (task) => {
   return (dispatch, getState) => {
+    dispatch({ type: type.CREATE_TASK_INIT });
     console.log("Action, received task", task);
+
     fetch("/tasks", {
       method: "POST",
       body: task,
