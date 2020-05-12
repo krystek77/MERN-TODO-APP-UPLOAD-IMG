@@ -26,7 +26,7 @@ function Footer({ classes }) {
 				<span role="img" aria-label="love">
 					❤️
 				</span>{' '}
-				Krystian Wrona, 2019
+				Krystian Wrona, 2019 - 2020
 			</Typography>
 			<Link
 				href="https://github.com"
@@ -41,7 +41,7 @@ function Footer({ classes }) {
 				/
 			</Typography>
 			<Link
-				href="https://pl.linkedin.com"
+				href="https://www.linkedin.com/in/krystian-wrona-77237ab4/"
 				color="secondary"
 				target="_blank"
 				rel="noopener"
