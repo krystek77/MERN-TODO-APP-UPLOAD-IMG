@@ -21,7 +21,7 @@ import {
 import Icon from "@material-ui/core/Icon";
 import PageTitle from "../../shared/PageTitle/PageTitle";
 import { connect } from "react-redux";
-import { getTaskById, editTask } from "../../../store/actions/taskActions";
+import { editTask } from "../../../store/actions/taskActions";
 import "abortcontroller-polyfill/dist/polyfill-patch-fetch";
 import teal from "@material-ui/core/colors/teal";
 
@@ -254,7 +254,7 @@ function EditTask(props) {
         <LoadingSpinner description="Uploading image" />
       </>
     );
-  let { title, priority, deadline, description, image } = task;
+  let { title, priority, deadline, description } = task;
   return (
     <div className={classes.wditTask}>
       {isMessage ? (
