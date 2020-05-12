@@ -60,8 +60,6 @@ function TaskDetail({
     finished: false,
   });
   const [isMessage, setIsMessage] = useState(false);
-  const [imgURL, setImgURL] = useState(false);
-
   const { idTask } = match.params;
 
   useEffect(() => {
@@ -85,7 +83,6 @@ function TaskDetail({
         });
       }
       setIsMessage(false);
-      setImgURL(true);
     }
     return () => {
       mounted = false;
@@ -156,7 +153,7 @@ function TaskDetail({
               title={title}
               subheader={`Created at ${createdAt}. Updated at ${updatedAt}. DEADLINE ${deadline}`}
             />
-            {imgURL ? (
+            {image ? (
               <CardMedia
                 className={classes.media}
                 image={image}
