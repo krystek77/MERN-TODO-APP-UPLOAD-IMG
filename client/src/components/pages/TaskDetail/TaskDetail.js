@@ -18,6 +18,9 @@ import { withStyles } from "@material-ui/core/styles";
 import { Link as RouterLink } from "react-router-dom";
 import teal from "@material-ui/core/colors/teal";
 
+import FetchError from "../../shared/FetchError/FetchError";
+import LoadingSpinner from "../../shared/LoadingSpinner/LoadingSpinner";
+
 const styles = (theme) => ({
   wrapperDetailTask: {
     maxWidth: "800px",
@@ -37,7 +40,15 @@ const styles = (theme) => ({
   },
 });
 
-function TaskDetail({ match, getTaskById, task, classes }) {
+function TaskDetail({
+  match,
+  getTaskById,
+  task,
+  classes,
+  isLoading,
+  isError,
+  message,
+}) {
   const [detailTask, setDetailTask] = useState({
     title: "",
     priority: "",
@@ -48,16 +59,16 @@ function TaskDetail({ match, getTaskById, task, classes }) {
     updatedAt: "",
     finished: false,
   });
+  const [isMessage, setIsMessage] = useState(false);
 
   const { idTask } = match.params;
 
   useEffect(() => {
     let mounted = true;
-    console.log(idTask);
-
     const controller = new AbortController();
 
     if (mounted) {
+      setIsMessage(true);
       getTaskById(idTask, controller);
 
       if (task) {
@@ -72,6 +83,7 @@ function TaskDetail({ match, getTaskById, task, classes }) {
           finished: task.finished,
         });
       }
+      setIsMessage(false);
     }
     return () => {
       mounted = false;
@@ -79,6 +91,40 @@ function TaskDetail({ match, getTaskById, task, classes }) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [task._id]);
+
+  //
+  if (isError)
+    return (
+      <>
+        <FetchError />
+        {isMessage && (
+          <Typography
+            component="span"
+            variant="body1"
+            align="center"
+            classes={{ root: classes.message }}
+          >
+            {message}
+          </Typography>
+        )}
+      </>
+    );
+  else if (isLoading)
+    return (
+      <>
+        {isMessage && (
+          <Typography
+            component="span"
+            variant="body1"
+            align="center"
+            classes={{ root: classes.message }}
+          >
+            {message}
+          </Typography>
+        )}
+        <LoadingSpinner description="Loading taks details" />
+      </>
+    );
 
   const {
     title,
@@ -89,7 +135,7 @@ function TaskDetail({ match, getTaskById, task, classes }) {
     updatedAt,
     deadline,
   } = detailTask;
-  console.log(task);
+
   return (
     <div className={classes.wrapperDetailTask}>
       <Grid container spacing={16}>
@@ -97,6 +143,9 @@ function TaskDetail({ match, getTaskById, task, classes }) {
           <PageTitle>tasks details</PageTitle>
           <Typography component="div" variant="subtitle2" align="center">
             {idTask}
+          </Typography>
+          <Typography component="p" variant="subtitle1" align="center">
+            {isMessage ? message : "..."}
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -137,6 +186,9 @@ function TaskDetail({ match, getTaskById, task, classes }) {
 const mapStateToProps = (state) => {
   return {
     task: state.task.task,
+    isLoading: state.task.isLoading,
+    isError: state.task.isError,
+    message: state.task.isMessage,
   };
 };
 //

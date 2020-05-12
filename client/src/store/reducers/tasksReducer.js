@@ -89,11 +89,27 @@ const tasksReducer = (state = initState, action) => {
         ...state,
         message: action.message,
       };
-    case type.GET_TASK_BY_ID:
-      // console.log(type.GET_TASK_BY_ID, action.task);
+    case type.GET_TASK_BY_ID_INIT:
       return {
         ...state,
+        isLoading: true,
+        isError: false,
+        message: "Loading task. It takes few seconds, I think so",
+      };
+    case type.GET_TASK_BY_ID:
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        message: "Task uploaded successfully",
         task: action.task,
+      };
+    case type.GET_TASK_BY_ID_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+        message: "Task uploaded failed",
       };
     case type.FINISH_TASK:
       console.log(type.FINISH_TASK);
