@@ -61,11 +61,11 @@ function Dashboard(props) {
     clearMessage,
     isAuthenticated,
   } = props;
-  // console.log(props);
+  //
   useEffect(() => {
     if (!isAuthenticated) props.history.push("/users/signin");
 
-    // console.log('useEffect from dasboard');
+    //
     let mounted = true;
     const controller = new AbortController();
     const interval = setTimeout(clearMessage, 2000);
@@ -77,7 +77,7 @@ function Dashboard(props) {
       mounted = false;
       controller.abort();
       clearTimeout(interval);
-      // console.log('Unmounting dashboard, nounted = ', mounted);
+      //
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tasks.length, isAuthenticated]);
@@ -137,7 +137,7 @@ function Dashboard(props) {
 }
 
 const mapStateToProps = (state) => {
-  // console.log('CURRENT STATE DASHBOARD:', state);
+  //
   return {
     tasks: state.task.tasks,
     isLoading: state.task.isLoading,

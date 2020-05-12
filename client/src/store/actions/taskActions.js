@@ -48,7 +48,6 @@ export const deleteTask = (idTask) => {
   return (dispatch, getState) => {
     fetch(`/tasks/${idTask}`, { method: "DELETE" })
       .then((result) => {
-        console.log(result, idTask);
         dispatch({ type: type.DELETE_TASK, id: idTask });
       })
       .catch((error) => {
@@ -60,7 +59,6 @@ export const deleteTask = (idTask) => {
 export const createTask = (task) => {
   return (dispatch, getState) => {
     dispatch({ type: type.CREATE_TASK_INIT });
-    console.log("Action, received task", task);
 
     fetch("/tasks", {
       method: "POST",
@@ -68,7 +66,6 @@ export const createTask = (task) => {
       headers: configTokenFormData(getState),
     })
       .then((result) => {
-        console.log("Action task", result);
         dispatch({ type: "CREATE_TASK", task: task });
       })
       .catch((error) => {
@@ -85,7 +82,7 @@ export const editTask = (task, id) => {
       body: task,
     })
       .then((response) => {
-        // console.log(response);
+        //
         return response.json();
       })
       .then((result) => {
@@ -96,7 +93,7 @@ export const editTask = (task, id) => {
         });
       })
       .catch((error) => {
-        // console.log(error);
+        //
         dispatch({ type: type.EDIT_TASK_ERROR, error: error.message });
       });
   };
@@ -119,14 +116,13 @@ export const getTaskById = (idTask, abortController) => {
         dispatch({ type: type.GET_TASK_BY_ID, task: task });
       })
       .catch((error) => {
-        console.log(error);
         dispatch({ type: type.GET_TASK_BY_ID_ERROR });
       });
   };
 };
 //
 export const finishTask = (task) => {
-  // console.log(task);
+  //
   return (dispatch, getState) => {
     fetch(`/tasks/finish/${task._id}`, {
       method: "PUT",
@@ -136,11 +132,11 @@ export const finishTask = (task) => {
       body: JSON.stringify(task),
     })
       .then((response) => {
-        // console.log(response);
+        //
         return response.json();
       })
       .then((result) => {
-        // console.log(result);
+        //
         dispatch({
           type: type.FINISH_TASK,
           message: result.message,
@@ -148,7 +144,7 @@ export const finishTask = (task) => {
         });
       })
       .catch((error) => {
-        // console.log(error);
+        //
         dispatch({ type: type.FINISH_TASK_ERROR, message: error.message });
       });
   };

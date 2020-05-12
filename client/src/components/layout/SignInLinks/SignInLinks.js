@@ -38,7 +38,6 @@ const styles = (theme) => ({
 function SignInLinks(props) {
   const { classes, logout, user } = props;
   const handleLogoutUser = () => {
-    console.log("handleLogoutUser");
     logout();
   };
 

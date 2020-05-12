@@ -18,7 +18,7 @@ const auth = require("../middleware/auth");
 //@access	Private
 router.get("/", auth, (req, res, next) => {
   const userId = req.user.id;
-  // console.log(userId);
+  //
   Task.find({ userId: userId })
     .select("-__v")
     .then((tasks) => {
@@ -41,7 +41,7 @@ router.get("/:idTask", (req, res, next) => {
           .status(400)
           .json({ message: `Task with id ${id} does not exist` });
       }
-      console.log("GET by ID", task);
+
       res.status(200).json(task);
     })
     .catch((error) =>
@@ -56,7 +56,7 @@ router.post("/", auth, upload.single("image"), async (req, res, next) => {
   const userId = req.user.id;
   try {
     const result = await cloudinary.v2.uploader.upload(req.file.path);
-    console.log("RESULT", result);
+
     const task = new Task({
       title: title,
       priority: priority,
@@ -67,11 +67,9 @@ router.post("/", auth, upload.single("image"), async (req, res, next) => {
       image: result.secure_url,
     });
     await task.save();
-    console.log("SAVE");
+
     res.status(201).json(task);
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 });
 //@route DELETE tasks/:idTask
 //@desc Delete one task
@@ -86,18 +84,15 @@ router.delete("/:idTask", (req, res, next) => {
           .json({ message: `Task width id ${id} does not exist` });
       Task.deleteOne({ _id: id })
         .then((result) => {
-          console.log("Deleted task succesffuly");
           res
             .status(200)
             .json({ message: "Deleting task successfully", result });
         })
         .catch((error) => {
-          console.log("Deleting task failed");
           res.status(400).json({ message: "Deleting task failed" });
         });
     })
     .catch((error) => {
-      console.log("Something went wrong...");
       res
         .status(400)
         .json({ message: "Something went wrong..., maybe wrong length of id" });
@@ -110,9 +105,9 @@ router.put("/:idTask", upload.single("image"), async (req, res, next) => {
   const id = req.params.idTask;
   try {
     const image = await cloudinary.v2.uploader.upload(req.file.path);
-    console.log(image);
+
     const task = await Task.findById(id);
-    console.log(task);
+
     if (!task) return res.status(404).json({ message: "Task does not exist" });
 
     task.title = req.body.title;
@@ -125,7 +120,6 @@ router.put("/:idTask", upload.single("image"), async (req, res, next) => {
     task.updatedAt = req.body.updatedAt;
 
     await task.save();
-    console.log("SAVE UPDATED IMAGE");
 
     res.status(200).json({
       task: task,

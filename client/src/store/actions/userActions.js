@@ -39,12 +39,10 @@ export const loadUser = () => {
             dispatch({ type: type.USER_LOADED, user: response });
             break;
           default:
-            console.log("Unhandled");
             break;
         }
       })
       .catch((error) => {
-        console.log(error);
         dispatch({ type: type.AUTH_ERROR });
       });
   };
@@ -52,7 +50,6 @@ export const loadUser = () => {
 //Sign up user
 export const signUp = (newUser) => {
   return (dispatch, getState) => {
-    console.log("signUp action");
     let resStatus = 0;
     fetch("/users/signup", {
       method: "POST",
@@ -66,14 +63,14 @@ export const signUp = (newUser) => {
       .then((response) => {
         switch (resStatus) {
           case 409:
-            // console.log(resStatus, response);
+            //
             dispatch(
               returnErrors(response.message, response.status, response.id)
             );
             dispatch({ type: type.SIGNUP_FAIL });
             break;
           case 201:
-            // console.log(resStatus, response);
+            //
             dispatch({
               type: type.SIGNUP_SUCCESS,
               token: response.token,
@@ -82,26 +79,24 @@ export const signUp = (newUser) => {
             dispatch(clearErrors());
             break;
           case 400:
-            // console.log(resStatus, response);
+            //
             dispatch(
               returnErrors(response.message, response.status, response.id)
             );
             dispatch({ type: type.SIGNUP_FAIL });
             break;
           case 500:
-            // console.log(resStatus, response);
+            //
             dispatch(
               returnErrors(response.message, response.status, response.id)
             );
             dispatch({ type: type.SIGNUP_FAIL });
             break;
           default:
-            console.log("uhandled");
             break;
         }
       })
       .catch((error) => {
-        console.log(error);
         dispatch({ type: type.SIGNUP_FAIL });
       });
   };
@@ -128,22 +123,22 @@ export const signin = (user) => {
       .then((data) => {
         switch (resStatus) {
           case 409:
-            // console.log('DATA', resStatus, data);
+            //
             dispatch(returnErrors(data.message, data.status, data.id));
             dispatch({ type: type.LOGIN_FAIL });
             break;
           case 403:
-            // console.log('DATA', resStatus, data);
+            //
             dispatch(returnErrors(data.message, data.status, data.id));
             dispatch({ type: type.LOGIN_FAIL });
             break;
           case 400:
-            // console.log('DATA', resStatus, data);
+            //
             dispatch(returnErrors(data.message, data.status, data.id));
             dispatch({ type: type.LOGIN_FAIL });
             break;
           case 201:
-            // console.log('DATA', resStatus, data);
+            //
             dispatch({
               type: type.LOGIN_SUCCESS,
               token: data.token,
@@ -152,12 +147,10 @@ export const signin = (user) => {
             dispatch(clearErrors());
             break;
           default:
-            console.log("not handled");
             break;
         }
       })
       .catch((error) => {
-        console.log(type.LOGIN_FAIL, error);
         dispatch({ type: type.LOGIN_FAIL });
       });
   };

@@ -177,9 +177,7 @@ function EditTask(props) {
       editTask(formData, id);
       setIsEditingTask(true);
       //
-    } catch (error) {
-      console.log("Failed save image to Cloudinary");
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -385,7 +383,6 @@ function EditTask(props) {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     isLoading: state.task.isLoading,
     isError: state.task.isError,

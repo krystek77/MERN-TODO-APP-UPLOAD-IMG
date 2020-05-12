@@ -109,7 +109,6 @@ function LastAddedTodoTask({ classes, tasks, deleteTask }) {
     }
     return () => {
       mounted = false;
-      console.log("LAST ADDED TASK UNMOUNTED");
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

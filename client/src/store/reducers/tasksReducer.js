@@ -11,7 +11,6 @@ const initState = {
 const tasksReducer = (state = initState, action) => {
   switch (action.type) {
     case type.GET_TASKS_INIT:
-      console.log("GET_TASKS_INIT");
       return {
         ...state,
         isLoading: true,
@@ -19,7 +18,6 @@ const tasksReducer = (state = initState, action) => {
         message: "Initialization fetching data...",
       };
     case type.GET_TASKS_SUCCESS:
-      console.log("GET_TASKS_SUCCESS");
       return {
         ...state,
         isLoading: false,
@@ -28,7 +26,6 @@ const tasksReducer = (state = initState, action) => {
         tasks: action.tasks,
       };
     case type.GET_TASKS_ERROR:
-      console.log("GET_TASKS_ERROR");
       return {
         ...state,
         isLoading: false,
@@ -36,20 +33,17 @@ const tasksReducer = (state = initState, action) => {
         message: "Something went wrong...",
       };
     case type.DELETE_TASK:
-      console.log(type.DELETE_TASK);
       return {
         ...state,
         message: `Deleted task with id ${action.id} successfully`,
         tasks: state.tasks.filter((task) => task._id !== action.id),
       };
     case type.DELETE_TASK_ERROR:
-      console.log(type.DELETE_TASK_ERROR);
       return {
         ...state,
         message: `deleted task with id ${action.id} failed`,
       };
     case type.CREATE_TASK_INIT:
-      console.log(type.CREATE_TASK_INIT);
       return {
         ...state,
         isLoading: true,
@@ -57,7 +51,7 @@ const tasksReducer = (state = initState, action) => {
         message: "It takes few seconds, i think so.",
       };
     case type.CREATE_TASK:
-      // console.log(type.CREATE_TASK, action.task);
+      //
       return {
         ...state,
         isLoading: false,
@@ -66,7 +60,6 @@ const tasksReducer = (state = initState, action) => {
         message: "Add task successfully",
       };
     case type.CREATE_TASK_ERROR:
-      console.log(type.CREATE_TASK_ERROR);
       return {
         ...state,
         isLoading: false,
@@ -120,7 +113,6 @@ const tasksReducer = (state = initState, action) => {
         message: "Task uploaded failed",
       };
     case type.FINISH_TASK:
-      console.log(type.FINISH_TASK);
       const i = state.tasks.findIndex((task) => task._id === action.task._id);
       state.tasks[i] = action.task;
       return {
@@ -128,10 +120,8 @@ const tasksReducer = (state = initState, action) => {
         message: action.message,
       };
     case type.FINISH_TASK_ERROR:
-      console.log(type.FINISH_TASK_ERROR);
       return state;
     case type.CLEAR_MESSAGE:
-      console.log(type.CLEAR_MESSAGE);
       return {
         ...state,
         message: action.message,

@@ -104,7 +104,6 @@ function UrgentTodoTask({ classes, deleteTask, tasks }) {
     }
     return () => {
       mounted = false;
-      console.log("URGENT TASK UNMOUNTED");
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

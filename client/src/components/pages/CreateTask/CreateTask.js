@@ -99,7 +99,7 @@ function CreateTask(props) {
   const [isCreateTask, setIsCreateTask] = useState(false);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const handlePriority = (event) => {
-    // console.log(event.target.value);
+    //
     setTask({
       ...task,
       priority: event.target.value,
@@ -107,7 +107,7 @@ function CreateTask(props) {
   };
   //
   const handleInputText = (event) => {
-    // console.log(event.target.name);
+    //
     setTask({
       ...task,
       [event.target.name]: event.target.value,
@@ -178,15 +178,12 @@ function CreateTask(props) {
       });
       setFile("");
       setIsCreateTask(true);
-    } catch (error) {
-      console.log("Failed save image to Cloudinary");
-    }
+    } catch (error) {}
   };
 
   const { title, priority, deadline, description } = task;
   //
   useEffect(() => {
-    console.log("USE EFFECT CREATE TASK");
     if (!isAuthenticated) props.history.push("/users/signin");
 
     const interval = setTimeout(() => setIsMessage(false), 1000);
