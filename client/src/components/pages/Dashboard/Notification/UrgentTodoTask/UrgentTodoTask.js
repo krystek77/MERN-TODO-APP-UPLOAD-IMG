@@ -17,6 +17,7 @@ import { Link as RouterLink } from "react-router-dom";
 import teal from "@material-ui/core/colors/teal";
 import { deleteTask } from "../../../../../store/actions/taskActions";
 import { connect } from "react-redux";
+import LoadingSpinner from "../../../../shared/LoadingSpinner/LoadingSpinner";
 
 const styles = (theme) => ({
   urgentTodoTask: {
@@ -127,7 +128,15 @@ function UrgentTodoTask({ classes, deleteTask, tasks }) {
           classes={{ root: classes.buttonBase }}
         >
           <CardActionArea>
-            <CardMedia className={classes.media} image={image} title={title} />
+            {image ? (
+              <CardMedia
+                className={classes.media}
+                title={title}
+                image={image}
+              />
+            ) : (
+              <LoadingSpinner description="Loading image" />
+            )}
             <CardContent>
               <Typography gutterBottom variant="h5" component="h3">
                 {title}

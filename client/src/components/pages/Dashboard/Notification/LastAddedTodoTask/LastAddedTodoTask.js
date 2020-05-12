@@ -17,6 +17,7 @@ import SvgIconButton from "../../../../shared/SvgIconButton/SvgIconButton";
 import teal from "@material-ui/core/colors/teal";
 import { deleteTask } from "../../../../../store/actions/taskActions";
 import { connect } from "react-redux";
+import LoadingSpinner from "../../../../shared/LoadingSpinner/LoadingSpinner";
 
 const styles = (theme) => ({
   lastAddedTodoTask: {
@@ -132,7 +133,15 @@ function LastAddedTodoTask({ classes, tasks, deleteTask }) {
           classes={{ root: classes.buttonBase }}
         >
           <CardActionArea>
-            <CardMedia className={classes.media} title={title} image={image} />
+            {image ? (
+              <CardMedia
+                className={classes.media}
+                title={title}
+                image={image}
+              />
+            ) : (
+              <LoadingSpinner description="Loading image" />
+            )}
             <CardContent>
               <Typography gutterBottom variant="h5" component="h3">
                 {title}
