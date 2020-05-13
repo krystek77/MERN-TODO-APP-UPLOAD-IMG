@@ -1,13 +1,6 @@
-require("dotenv").config();
+const cloudinary = require("../../helpers/cloudinary");
 const express = require("express");
 const router = express.Router();
-const cloudinary = require("cloudinary");
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_SECRET,
-});
 
 const upload = require("../../helpers/multer");
 const Task = require("../models/task");
