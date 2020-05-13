@@ -6,7 +6,8 @@ TODO FullStack application based on MERN technological stack (mondodb,express,re
 
 >Add your "mongoURI" and "jwtSecret" to the default.json file.
 >See: default.example.json.
-
+>Add your cloudinary url and upload preset name to the src/utils/cloudinary.js
+>See: src/utils/cloudinary.example.js
 
 ### Install dependencies for server
 
@@ -42,7 +43,7 @@ Krystian Wrona
 
 ###### Heroku
 
-[Application link] https://secure-forest-69328.herokuapp.com/
+[Application link] https://mern-todo-app-upload-img.herokuapp.com/
 
 ###### Version
 
