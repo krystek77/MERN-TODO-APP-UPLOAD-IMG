@@ -1,4 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://<USER>:<PASSWORD>@mern-wwfsy.mongodb.net/test?retryWrites=true&w=majority",
-  "jwtSecret": "YOUR_SECRET_JWT"
+  "mongoURI": "YOUR_MONGODB_URL",
+  "jwtSecret": "YOUR_JWT_SECRET"
 }
