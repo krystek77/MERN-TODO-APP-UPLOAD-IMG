@@ -28,6 +28,8 @@ import teal from "@material-ui/core/colors/teal";
 import FetchError from "../../shared/FetchError/FetchError";
 import LoadingSpinner from "../../shared/LoadingSpinner/LoadingSpinner";
 
+const cloudinary = require("../../../utils/cloudinary");
+
 const styles = (theme) => ({
   editTask: {},
   formWrapper: {
@@ -137,19 +139,15 @@ function EditTask(props) {
     });
   };
 
-  const CLOUDINARY_API_BASE_URL =
-    "https://api.cloudinary.com/v1_1/doydwvtkw/image/upload";
-  const CLOUDINARY_UPLOAD_PRESET = "d1lq6n03";
-
   const handleUpdatingTodoTask = async (event) => {
     event.preventDefault();
     //
     const formData = new FormData();
     formData.append("file", task.image);
-    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+    formData.append("upload_preset", cloudinary.CLOUDINARY_UPLOAD_PRESET);
     try {
       setIsUploadingImage(true);
-      const res = await fetch(CLOUDINARY_API_BASE_URL, {
+      const res = await fetch(cloudinary.CLOUDINARY_API_BASE_URL, {
         method: "POST",
         body: formData,
       });
