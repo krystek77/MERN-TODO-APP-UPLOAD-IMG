@@ -47,7 +47,9 @@ function TaskDetail({
   classes,
   isLoading,
   isError,
+  isAuthenticated,
   message,
+  history,
 }) {
   const [detailTask, setDetailTask] = useState({
     title: "",
@@ -63,6 +65,7 @@ function TaskDetail({
   const { idTask } = match.params;
 
   useEffect(() => {
+    if (!isAuthenticated) history.push("/users/signin");
     let mounted = true;
     const controller = new AbortController();
 
@@ -89,7 +92,7 @@ function TaskDetail({
       controller.abort();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [task._id]);
+  }, [task._id, isAuthenticated]);
 
   //
   if (isError)
@@ -197,6 +200,7 @@ const mapStateToProps = (state) => {
     isLoading: state.task.isLoading,
     isError: state.task.isError,
     message: state.task.isMessage,
+    isAuthenticated: state.user.isAuthenticated,
   };
 };
 //
