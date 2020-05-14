@@ -1,9 +1,9 @@
 const multer = require("multer");
 module.exports = multer({
   storage: multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, "./upload_image/");
-    },
+    // destination: function (req, file, cb) {
+    //   cb(null, "./upload_image/");
+    // },
     filename: function (req, file, cb) {
       // - .jpeg
       const extension = file.originalname.substring(
