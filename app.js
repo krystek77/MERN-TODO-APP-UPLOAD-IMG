@@ -17,7 +17,7 @@ app.use(
 );
 app.use(morgan("dev"));
 // app.use("/uploads", express.static("uploads"));
-app.use("/upload_image", express.static("upload_image"));
+// app.use("/upload_image", express.static("upload_image"));
 const userRoutes = require("./api/routes/users");
 const taskRoutes = require("./api/routes/tasks");
 //
