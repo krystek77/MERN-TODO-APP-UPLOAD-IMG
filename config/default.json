@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://atlasMern:U7Km4MgI1WISVuG4@mern-wwfsy.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "mern_to_app"
+}
